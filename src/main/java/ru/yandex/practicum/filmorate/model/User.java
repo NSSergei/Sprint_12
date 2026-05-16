@@ -14,7 +14,7 @@ import java.util.Set;
 @Data
 @ToString
 public class User  {
-    @PositiveOrZero(message = "id не может быть отрицательным числом")
+    //@PositiveOrZero(message = "id не может быть отрицательным числом")
     Long id;
     @NotBlank(message = "Email не должен быть пустым")
     @Email(message = "Email должна содержать символ @")
@@ -24,5 +24,4 @@ public class User  {
     String login;
     String name;
     LocalDate birthday;
-    private Set<Long> friends = new HashSet<>();
 }
