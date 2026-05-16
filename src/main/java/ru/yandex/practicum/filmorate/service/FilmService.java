@@ -144,7 +144,7 @@ public class FilmService {
         return MpaRating.fromId(id);
     }
 
-    public Collection<Film> getFilmsByGenreId(Long id ) {
+    public Collection<Film> getFilmsByGenreId(Long id) {
        return filmDbStorage.getFilmsByGenreId(id);
     }
 
