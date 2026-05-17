@@ -44,6 +44,7 @@ public class FilmDbStorage implements FilmStorage {
 
         film.setId(keyHolder.getKey().longValue());
         saveGenres(film);
+        loadGenres(film);
         return film;
     }
 
