@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import lombok.Getter;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
