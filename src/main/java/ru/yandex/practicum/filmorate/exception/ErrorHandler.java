@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.http.HttpStatus;
@@ -41,5 +43,17 @@ public class ErrorHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         });
         return errors;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Map<String, String> handleInvalidDefinitionException(
+            final InvalidDefinitionException e) {
+         if (e.getCause() instanceof NotFoundException) {
+             log.warn("NOT_FOUND DUARING DESERIALISATION {}", e.getCause().getMessage());
+             return Map.of("error", e.getCause().getMessage());
+         }
+         log.error("InvalidDefinition {}", e.getMessage());
+         return Map.of("error", "InvalidValue");
     }
 }
