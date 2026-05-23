@@ -1,21 +1,23 @@
 package ru.yandex.practicum.filmorate.dao.film;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import ru.yandex.practicum.filmorate.dao.genre.FilmWithGenreRowMapper;
+import ru.yandex.practicum.filmorate.dao.genre.GenreRowMapper;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.enums.Genre;
-import ru.yandex.practicum.filmorate.model.enums.MpaRating;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+@Slf4j
 @Repository("filmDateBaseRepository")
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
@@ -41,10 +43,15 @@ public class FilmDbStorage implements FilmStorage {
             ps.setLong(5, film.getMpa().getId());
             return ps;
         }, keyHolder);
+        log.info("add request send");
 
         film.setId(keyHolder.getKey().longValue());
         saveGenres(film);
+
+        log.info("saveGenres");
         loadGenres(film);
+
+        log.info("loadGenres");
         return film;
     }
 
@@ -84,13 +91,13 @@ public class FilmDbStorage implements FilmStorage {
     public Collection<Film> getFilms() {
         String sql = """
                 SELECT *
-                FROM films
-                ORDER BY id
+                FROM films f 
+                LEFT JOIN filmsGenre fg ON f.id = fg.filmId
+                LEFT JOIN genre g ON fg.genreId = g.genreId
+                ORDER BY f.id
                 """;
 
-        List<Film> films = jdbcTemplate.query(sql, new FilmRowMapper());
-        films.forEach(this::loadGenres);
-        return films;
+        return jdbcTemplate.query(sql, new FilmWithGenreRowMapper());
     }
 
     @Override
@@ -124,7 +131,7 @@ public class FilmDbStorage implements FilmStorage {
         jdbcTemplate.update(sql);
     }
 
-    public Collection<Film> getMpa(MpaRating mpa) {
+    public Collection<Film> getMpa(Mpa mpa) {
         String sql = """
                 SELECT *
                 FROM films
@@ -234,9 +241,8 @@ public class FilmDbStorage implements FilmStorage {
                 ORDER BY genreId
                 """;
 
-        List<Genre> genres = jdbcTemplate.query(sql,
-                (rs, rowNum) -> Genre.fromId(rs.getLong("genreId")),
-                film.getId());
+        List<Genre> genres = jdbcTemplate.query(sql, new GenreRowMapper());
+        log.info("Load genres was saccesfull");
         film.setGenres(new java.util.LinkedHashSet<>(genres));
     }
 }

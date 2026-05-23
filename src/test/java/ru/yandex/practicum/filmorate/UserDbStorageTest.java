@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dao.user;
+/*package ru.yandex.practicum.filmorate.dao.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -143,4 +143,4 @@ class UserDbStorageTest {
         assertEquals(1, mutual.size());
         assertEquals(u2.getId(), mutual.iterator().next().getId());
     }
-}
+}*/

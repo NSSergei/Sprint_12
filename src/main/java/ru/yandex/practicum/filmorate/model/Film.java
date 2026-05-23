@@ -5,9 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.ToString;
 
-import ru.yandex.practicum.filmorate.model.enums.Genre;
-import ru.yandex.practicum.filmorate.model.enums.MpaRating;
-
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -26,6 +23,6 @@ public class Film {
     @Positive(message = "Продолжительность должна быть положительным числом")
     int duration;
     @NotNull(message = "MPA рейтинг обязателен")
-    private MpaRating mpa;
+    private Mpa mpa;
     private Set<Genre> genres = new LinkedHashSet<>();
 }

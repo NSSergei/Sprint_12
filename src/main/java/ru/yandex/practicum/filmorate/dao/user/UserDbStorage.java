@@ -88,7 +88,7 @@ public class UserDbStorage implements UserStorage {
         String sql = """
                 SELECT *
                 FROM users
-                ORDER BY id
+                ORDER BY id 
                 """;
         return jdbcTemplate.query(sql, new UserRowMapper());
     }

@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.dao.film.FilmDbStorage;
+import ru.yandex.practicum.filmorate.dao.genre.GenreDao;
+import ru.yandex.practicum.filmorate.dao.mpa.MpaDao;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.enums.Genre;
-import ru.yandex.practicum.filmorate.model.enums.MpaRating;
+import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -23,7 +25,8 @@ public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
     private static final LocalDate FIRST_FILM = LocalDate.of(1895,12,28);
-    private MpaRating mpaRating;
+    private MpaDao mpaDao;
+    private GenreDao genreDao;
     private final FilmDbStorage filmDbStorage;
 
     public  FilmService(@Qualifier("filmDateBaseRepository") FilmDbStorage filmStorage, @Qualifier(
@@ -128,20 +131,20 @@ public class FilmService {
 
     }
 
-    public Collection<MpaRating> getMpa() {
-        return  List.of(MpaRating.values());
+    public Collection<Mpa> getMpa() {
+        return mpaDao.getMpa();
     }
 
     public Collection<Genre> getGenres() {
-        return  List.of(Genre.values());
+        return  genreDao.getGenres();
     }
 
     public Genre getGenreById(long id) {
-        return Genre.fromId(id);
+        return genreDao.getGenreById(id);
     }
 
-    public MpaRating getMpaById(long id) {
-        return MpaRating.fromId(id);
+    public Mpa getMpaById(long id) {
+        return mpaDao.getMpaById(id);
     }
 
     public Collection<Film> getFilmsByGenreId(Long id) {

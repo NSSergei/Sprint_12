@@ -3,6 +3,18 @@ DROP TABLE IF EXISTS filmsLike;
 DROP TABLE IF EXISTS friendsLike;
 DROP TABLE IF EXISTS films;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS genre;
+DROP TABLE IF EXISTS mpa;
+
+CREATE TABLE IF NOT EXISTS genre(
+    genreId BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS mpa(
+    mpaId BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +30,9 @@ CREATE TABLE IF NOT EXISTS films (
      description VARCHAR(200),
      release_date DATE,
      duration INTEGER NOT NULL,
-     mpa_id BIGINT NOT NULL
+     mpa_id BIGINT NOT NULL,
+
+     FOREIGN KEY(mpa_id) REFERENCES mpa(mpaId)
 );
 
 CREATE TABLE IF NOT EXISTS friendsLike (
@@ -46,6 +60,7 @@ CREATE TABLE IF NOT EXISTS filmsGenre(
     genreId BIGINT NOT NULL,
 
     PRIMARY KEY (filmId, genreId),
-
-    FOREIGN KEY (filmId) REFERENCES films(id)
+    FOREIGN KEY (filmId) REFERENCES films(id),
+    FOREIGN KEY (genreId) REFERENCES genre(genreId)
 );
+
